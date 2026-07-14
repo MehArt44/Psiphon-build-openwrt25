@@ -8,16 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go Environment
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: false
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
       - name: Clone and Compile Psiphon Core
         run: |
           mkdir -p src
           git clone https://github.com/Psiphon-Labs/psiphon-tunnel-core.git
           cd psiphon-tunnel-core
-          echo "Compiling Psiphon for ARM64 (GL-MT3000)..."
           GOOS=linux GOARCH=arm64 go build -o ../src/psiphon-core ./ConsoleClient
           cd ..
 
