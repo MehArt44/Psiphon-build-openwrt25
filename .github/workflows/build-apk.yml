@@ -1,4 +1,4 @@
-name: Build Psiphon + LuCI GUI for GL-MT3000
+name: Build Psiphon for GL-MT3000
 
 on:
   workflow_dispatch:
@@ -7,22 +7,23 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Setup Go Environment
         uses: actions/setup-go@v5
         with:
           go-version: '1.22'
           cache: false
 
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Clone and Compile Psiphon Core
+      - name: Build Psiphon Core
         run: |
           mkdir -p src
           git clone https://github.com/Psiphon-Labs/psiphon-tunnel-core.git
           cd psiphon-tunnel-core
+          # استفاده از فلگ های استاندارد برای کامپایل
           GOOS=linux GOARCH=arm64 go build -o ../src/psiphon-core ./ConsoleClient
-          cd ..
+          echo "Psiphon core built successfully."
 
       - name: Prepare RootFS Structure and LuCI GUI
         run: |
